@@ -187,6 +187,17 @@ CREATE TABLE tracks (
             <p className="text-xs text-gray-500">
               {isLogin ? 'Connect securely to access spatial frequency tracks' : 'Host your profiles and log user play progress metrics'}
             </p>
+
+            {/* Public Demo Credentials Banner */}
+            <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg text-[11px] text-amber-800 text-left space-y-1 shadow-sm">
+              <span className="font-bold text-amber-950 block">✨ Public Testing Access Credentials:</span>
+              <div>
+                <span className="font-semibold text-gray-700">Email:</span> <code className="bg-white/80 px-1 py-0.5 rounded font-mono select-all">admin@brainmassage.co</code>
+              </div>
+              <div>
+                <span className="font-semibold text-gray-700">Password:</span> <code className="bg-white/80 px-1 py-0.5 rounded font-mono select-all">adminpassword</code>
+              </div>
+            </div>
           </div>
 
           {error && (
