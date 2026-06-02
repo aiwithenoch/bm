@@ -15,7 +15,8 @@ import {
   X,
   Sparkles,
   Github,
-  TrendingUp
+  TrendingUp,
+  BookOpen
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Track, User } from './types';
@@ -31,11 +32,12 @@ import SettingsMain from './components/SettingsMain';
 import AdminPortal from './components/AdminPortal';
 import AnalyticsPanel from './components/AnalyticsPanel';
 import PromptPack from './components/PromptPack';
+import MarketingPlaybook from './components/MarketingPlaybook';
 
 export default function App() {
   // Global States
   const [view, setView] = useState<'landing' | 'app'>('landing');
-  const [appPage, setAppPage] = useState<'discover' | 'library' | 'pricing' | 'settings' | 'admin' | 'analytics' | 'prompts'>('discover');
+  const [appPage, setAppPage] = useState<'discover' | 'library' | 'pricing' | 'settings' | 'admin' | 'analytics' | 'prompts' | 'marketing'>('discover');
   
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(localStorage.getItem('brain_massage_token'));
@@ -345,6 +347,19 @@ export default function App() {
                 </button>
 
                 <button
+                  onClick={() => setAppPage('marketing')}
+                  className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold rounded-md transition-all cursor-pointer ${
+                    appPage === 'marketing'
+                      ? 'bg-white border border-gray-200 text-gray-900 shadow-sm'
+                      : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100/50'
+                  }`}
+                  id="side-btn-marketing"
+                >
+                  <BookOpen className="w-3.5 h-3.5 shrink-0 text-sky-500" />
+                  <span>Marketing Playbook</span>
+                </button>
+
+                <button
                   onClick={() => setAppPage('pricing')}
                   className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold rounded-md transition-all cursor-pointer ${
                     appPage === 'pricing'
@@ -483,6 +498,12 @@ export default function App() {
                       Prompt Pack
                     </button>
                     <button
+                      onClick={() => { setAppPage('marketing'); setMobileSidebarOpen(false); }}
+                      className={`text-left px-3 py-2 text-xs font-semibold rounded ${appPage === 'marketing' ? 'bg-black text-white' : 'text-gray-600'}`}
+                    >
+                      Marketing Playbook
+                    </button>
+                    <button
                       onClick={() => { setAppPage('pricing'); setMobileSidebarOpen(false); }}
                       className={`text-left px-3 py-2 text-xs font-semibold rounded ${appPage === 'pricing' ? 'bg-black text-white' : 'text-gray-600'}`}
                     >
@@ -551,6 +572,10 @@ export default function App() {
 
             {appPage === 'prompts' && (
               <PromptPack />
+            )}
+
+            {appPage === 'marketing' && (
+              <MarketingPlaybook />
             )}
 
             {appPage === 'pricing' && (
