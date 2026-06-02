@@ -46,7 +46,9 @@ export default function Auth({ onAuthSuccess, openSetupModal, onShowToast }: Aut
       if (contentType && contentType.includes('application/json')) {
         data = await response.json();
       } else {
-        throw new Error('Connection error. Please try signing in again in a moment.');
+        const rawText = await response.text();
+        console.error('Server non-JSON response:', rawText);
+        throw new Error(`Server returned non-JSON response: ${rawText.slice(0, 180)}`);
       }
 
       if (!response.ok) {
