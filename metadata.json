@@ -1,0 +1,8 @@
+{
+  "name": "Brain Massage LMS",
+  "description": "An open-source brain massage audio streaming platform featuring spatial audio frequencies, self-hosting compatibility, subscription-gated playback, and an on-demand setup wizard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
