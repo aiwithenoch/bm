@@ -46,16 +46,11 @@ export default function Auth({ onAuthSuccess, openSetupModal, onShowToast }: Aut
       if (contentType && contentType.includes('application/json')) {
         data = await response.json();
       } else {
-        const text = await response.text();
-        if (text.includes('<!DOCTYPE html>') || text.includes('<html') || text.includes('The page') || text.includes('Cannot GET')) {
-          throw new Error('The server is currently starting up or reloading. Please wait 3 seconds and click Sign In again.');
-        } else {
-          throw new Error(text.slice(0, 150) || 'The server returned an invalid response.');
-        }
+        throw new Error('Connection error. Please try signing in again in a moment.');
       }
 
       if (!response.ok) {
-        throw new Error(data.error || 'Authentication failed. Please check parameters.');
+        throw new Error(data?.error || 'Authentication failed. Please check parameters.');
       }
 
       onAuthSuccess(data.user, data.token);
