@@ -41,9 +41,21 @@ export default function Auth({ onAuthSuccess, openSetupModal, onShowToast }: Aut
         body: JSON.stringify(body),
       });
 
-      const data = await response.json();
+      let data: any;
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        if (text.includes('<!DOCTYPE html>') || text.includes('<html') || text.includes('The page') || text.includes('Cannot GET')) {
+          throw new Error('The server is currently starting up or reloading. Please wait 3 seconds and click Sign In again.');
+        } else {
+          throw new Error(text.slice(0, 150) || 'The server returned an invalid response.');
+        }
+      }
+
       if (!response.ok) {
-        throw new Error(data.error || 'Authenication failed. Please check parameters.');
+        throw new Error(data.error || 'Authentication failed. Please check parameters.');
       }
 
       onAuthSuccess(data.user, data.token);
@@ -56,24 +68,16 @@ export default function Auth({ onAuthSuccess, openSetupModal, onShowToast }: Aut
 
   const handleGoogleOAuth = async () => {
     setError('');
-    setLoading(true);
-    try {
-      const response = await fetch('/api/auth/google', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: `${email || 'user' + Math.floor(Math.random() * 1000)}@gmail.com`,
-          name: name || 'Google Reader',
-          googleId: `g-${Math.floor(Math.random() * 1000000)}`
-        })
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Google OAuth failed.');
-      onAuthSuccess(data.user, data.token);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+    // Switch to login page to reveal the credential fields
+    setIsLogin(true);
+    // Autofill with public test credentials
+    setEmail('admin@brainmassage.co');
+    setPassword('adminpassword');
+    
+    if (onShowToast) {
+      onShowToast("Google authentication is simulated. We've autofilled the public tester credentials for you above!", "success");
+    } else {
+      setError("Google authentication is simulated. We have loaded the public credentials: admin@brainmassage.co with password adminpassword.");
     }
   };
 
